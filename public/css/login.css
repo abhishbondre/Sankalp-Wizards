@@ -1,0 +1,68 @@
+@import url("common.css");
+
+body {
+  background-color: #f8f9fa;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-container,
+.register-container {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  max-width: 450px;
+  width: 90%;
+  margin: 2rem auto;
+}
+
+.login-container h2,
+.register-container h2 {
+  color: var(--dark-color);
+  font-weight: 600;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.login-container h2:after,
+.register-container h2:after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 3px;
+  background: var(--primary-color);
+  border-radius: 3px;
+}
+
+.form-label {
+  font-weight: 500;
+  color: var(--dark-color);
+}
+
+.form-select,
+.form-control {
+  border-radius: 10px;
+  padding: 10px 15px;
+  margin-bottom: 1rem;
+}
+
+.form-control:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(74, 144, 226, 0.25);
+}
+
+.alert {
+  display: none;
+  margin-top: 1rem;
+}
+
+.alert.show {
+  display: block;
+}

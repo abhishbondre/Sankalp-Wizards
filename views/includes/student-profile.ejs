@@ -1,0 +1,295 @@
+<div class="profile-content">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="profile-photo-section">
+        <div class="profile-photo">
+          <img
+            src="<%= student.photoUrl || '/images/default-avatar.png' %>"
+            alt="Profile Photo"
+            id="profilePhoto"
+          />
+          <input
+            type="file"
+            id="photoInput"
+            accept="image/*"
+            style="display: none"
+          />
+          <div class="mt-3">
+            <button
+              class="btn btn-sm btn-outline-primary"
+              onclick="document.getElementById('photoInput').click()"
+            >
+              <i class="bi bi-camera"></i>
+              Change Photo
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-9">
+      <div class="profile-info">
+        <form id="profileForm">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Name</label>
+              <input
+                type="text"
+                class="form-control"
+                name="name"
+                value="<%= student.name %>"
+                required
+              />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Year of Study</label>
+              <input
+                type="number"
+                class="form-control"
+                name="year"
+                value="<%= student.year %>"
+                required
+              />
+            </div>
+          </div>
+
+          <!-- CGPA Section -->
+          <div class="mt-4">
+            <h5>CGPA Details</h5>
+            <div class="row">
+              <div class="col-md-6 mb-2">
+                <label class="form-label">1st Year CGPA</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  class="form-control"
+                  name="cgpa1"
+                  value="<%= student.cgpa1 %>"
+                />
+              </div>
+              <div class="col-md-6 mb-2">
+                <label class="form-label">2nd Year CGPA</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  class="form-control"
+                  name="cgpa2"
+                  value="<%= student.cgpa2 %>"
+                />
+              </div>
+              <div class="col-md-6 mb-2">
+                <label class="form-label">3rd Year CGPA</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  class="form-control"
+                  name="cgpa3"
+                  value="<%= student.cgpa3 %>"
+                />
+              </div>
+              <div class="col-md-6 mb-2">
+                <label class="form-label">4th Year CGPA</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  class="form-control"
+                  name="cgpa4"
+                  value="<%= student.cgpa4 %>"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Social Links -->
+          <div class="social-links-section mt-4">
+            <h4 class="mb-3">Social Links</h4>
+
+            <!-- Social Links Form -->
+            <form id="socialLinkForm" class="mb-3">
+              <div class="row g-3">
+                <div class="col-md-4">
+                  <select class="form-select" name="platform" required>
+                    <option value="">Select Platform</option>
+                    <option value="LinkedIn">LinkedIn</option>
+                    <option value="GitHub">GitHub</option>
+                    <option value="Portfolio">Portfolio</option>
+                    <option value="Twitter">Twitter</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <input
+                    type="url"
+                    class="form-control"
+                    name="url"
+                    placeholder="Enter URL"
+                    required
+                  />
+                </div>
+                <div class="col-md-2">
+                  <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-plus-lg"></i> Add
+                  </button>
+                </div>
+              </div>
+            </form>
+
+            <!-- Social Links List -->
+            <div id="socialLinksList">
+              <% if (student.socialLinks && student.socialLinks.length > 0) { %>
+              <% student.socialLinks.forEach(link => { %>
+              <div
+                class="social-link-item d-flex justify-content-between align-items-center"
+              >
+                <div>
+                  <i class="bi bi-<%= link.platform.toLowerCase() %>"></i>
+                  <span class="ms-2"><%= link.platform %></span>
+                  <a
+                    href="<%= link.url %>"
+                    target="_blank"
+                    class="ms-2 text-muted"
+                  >
+                    <%= link.url %>
+                  </a>
+                </div>
+                <button
+                  class="btn btn-sm btn-outline-danger"
+                  onclick="removeSocialLink('<%= link._id %>')"
+                >
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+              <% }) %> <% } else { %>
+              <p class="text-muted text-center">No social links added yet</p>
+              <% } %>
+            </div>
+          </div>
+
+          <!-- Certificates -->
+          <div class="certificates-section mt-4">
+            <h5>Certificates</h5>
+            <div id="certificateList">
+              <% (student.certificates || []).forEach(function(cert) { %>
+              <div class="certificate-item mb-2">
+                <div class="d-flex gap-2 align-items-center">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Certificate Name"
+                    value="<%= cert.name %>"
+                  />
+                  <div class="certificate-file">
+                    <% if (cert.file) { %>
+                    <a
+                      href="<%= cert.file %>"
+                      target="_blank"
+                      class="btn btn-sm btn-info"
+                      >View</a
+                    >
+                    <% } %>
+                  </div>
+                  <button
+                    type="button"
+                    class="btn btn-danger"
+                    onclick="removeCertificate(this)"
+                  >
+                    <i class="bi bi-x"></i>
+                  </button>
+                </div>
+              </div>
+              <% }); %>
+            </div>
+            <div class="mt-2">
+              <input
+                type="file"
+                id="certificateInput"
+                accept=".pdf,.jpg,.jpeg,.png"
+                style="display: none"
+                multiple
+              />
+              <button
+                type="button"
+                class="btn btn-secondary btn-sm"
+                onclick="document.getElementById('certificateInput').click()"
+              >
+                Add Certificate
+              </button>
+            </div>
+          </div>
+
+          <div class="profile-actions mt-4 d-flex gap-2">
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-save"></i>
+              Save Profile
+            </button>
+            <button
+              type="button"
+              class="btn btn-info"
+              onclick="previewProfile()"
+            >
+              <i class="bi bi-eye"></i>
+              Preview Profile
+            </button>
+            <button
+              type="button"
+              class="btn btn-success"
+              onclick="shareProfile()"
+            >
+              <i class="bi bi-share"></i>
+              Share Profile
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Preview Modal -->
+<div class="modal fade" id="previewModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Profile Preview</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+        ></button>
+      </div>
+      <div class="modal-body" id="previewContent">
+        <!-- Preview content will be inserted here -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Share Modal -->
+<div class="modal fade" id="shareModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Share Profile</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="input-group">
+          <input type="text" class="form-control" id="shareUrl" readonly />
+          <button
+            class="btn btn-primary"
+            type="button"
+            id="copyBtn"
+            onclick="copyShareUrl()"
+          >
+            <i class="bi bi-clipboard"></i> Copy
+          </button>
+        </div>
+        <small class="text-muted mt-2 d-block">
+          Share this link with others to let them view your profile
+        </small>
+      </div>
+    </div>
+  </div>
+</div>

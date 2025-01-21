@@ -1,0 +1,544 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="row">
+  <!-- Dashboard Section -->
+  <div id="dashboard" class="content-section">
+    <!-- Profile Section -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="dashboard-card profile-card">
+          <%- include('../includes/tpo-profile') %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats & Actions Row -->
+    <div class="row">
+      <!-- Stats Cards Row -->
+      <div class="row g-3 mb-4">
+        <div class="col-md-4">
+          <div class="dashboard-card stat-card">
+            <div class="stat-icon">
+              <i class="bi bi-people-fill"></i>
+            </div>
+            <h4>Total Students</h4>
+            <p class="stat-number"><%= stats.totalStudents %></p>
+            <small class="text-muted">Registered Students</small>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="dashboard-card stat-card">
+            <div class="stat-icon">
+              <i class="bi bi-briefcase-fill"></i>
+            </div>
+            <h4>Opportunities</h4>
+            <p class="stat-number"><%= stats.activeOpportunities %></p>
+            <small class="text-muted">Active Positions</small>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="dashboard-card stat-card">
+            <div class="stat-icon">
+              <i class="bi bi-calendar-event-fill"></i>
+            </div>
+            <h4>Events</h4>
+            <p class="stat-number"><%= stats.upcomingEvents %></p>
+            <small class="text-muted">Upcoming Events</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions Row -->
+      <div class="row g-3">
+        <div class="col-12">
+          <div class="dashboard-card">
+            <h3 class="section-title">Quick Actions</h3>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="action-card" data-section="add-opportunity">
+                  <div class="action-icon">
+                    <i class="bi bi-briefcase-fill"></i>
+                  </div>
+                  <h4>Add Opportunity</h4>
+                  <p>Post new job/internship opportunities</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="action-card" data-section="add-event">
+                  <div class="action-icon">
+                    <i class="bi bi-calendar-event-fill"></i>
+                  </div>
+                  <h4>Add Event</h4>
+                  <p>Schedule placement events</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Opportunities Section -->
+    <div class="row mt-4">
+      <div class="col-12">
+        <div class="dashboard-card">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="section-title mb-0">Recent Opportunities</h3>
+            <button
+              class="btn btn-outline-primary btn-sm"
+              data-section="add-opportunity"
+            >
+              <i class="bi bi-plus-lg"></i> Add New
+            </button>
+          </div>
+
+          <div class="opportunities-list">
+            <% if (opportunities && opportunities.length > 0) { %> <%
+            opportunities.forEach(opportunity => { %>
+            <div class="opportunity-card">
+              <div class="opportunity-header d-flex justify-content-between">
+                <div>
+                  <h4><%= opportunity.title %></h4>
+                  <span class="company-name"><%= opportunity.company %></span>
+                </div>
+                <div class="tpo-controls">
+                  <button
+                    class="btn btn-sm btn-outline-primary me-2"
+                    onclick="window.location.href='/opportunity/<%= opportunity._id %>/edit'"
+                  >
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button
+                    class="btn btn-sm btn-outline-danger"
+                    onclick="deleteOpportunity('<%= opportunity._id %>')"
+                  >
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="opportunity-body">
+                <p><%= opportunity.description %></p>
+                <div class="requirements mt-3">
+                  <h5>Requirements:</h5>
+                  <p><%= opportunity.requirements %></p>
+                </div>
+              </div>
+              <div class="opportunity-footer">
+                <span class="text-muted">
+                  <i class="bi bi-clock"></i>
+                  Posted <%= new
+                  Date(opportunity.createdAt).toLocaleDateString() %>
+                </span>
+                <span
+                  class="badge bg-<%= opportunity.status === 'active' ? 'success' : 'secondary' %>"
+                >
+                  <%= opportunity.status %>
+                </span>
+              </div>
+            </div>
+            <% }) %> <% } else { %>
+            <p class="text-center text-muted">No opportunities posted yet</p>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scheduled Events Section -->
+    <div class="row mt-4">
+      <div class="col-12">
+        <div class="dashboard-card">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="section-title mb-0">Scheduled Events</h3>
+            <button
+              class="btn btn-outline-primary btn-sm"
+              data-section="add-event"
+            >
+              <i class="bi bi-plus-lg"></i> Add New
+            </button>
+          </div>
+
+          <div class="events-list">
+            <% if (events && events.length > 0) { %> <% events.forEach(event =>
+            { %>
+            <div class="event-card">
+              <div class="event-header d-flex justify-content-between">
+                <div>
+                  <h4><%= event.title %></h4>
+                  <div class="event-meta">
+                    <span
+                      ><i class="bi bi-calendar-event"></i> <%= new
+                      Date(event.date).toLocaleDateString() %></span
+                    >
+                    <span
+                      ><i class="bi bi-clock"></i> <%= new
+                      Date(event.date).toLocaleTimeString() %></span
+                    >
+                    <span
+                      ><i class="bi bi-geo-alt"></i> <%= event.venue %></span
+                    >
+                  </div>
+                </div>
+                <div class="tpo-controls">
+                  <button
+                    class="btn btn-sm btn-outline-primary me-2"
+                    onclick="window.location.href='/event/<%= event._id %>/edit'"
+                  >
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button
+                    class="btn btn-sm btn-outline-danger"
+                    onclick="deleteEvent('<%= event._id %>')"
+                  >
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="event-body">
+                <p><%= event.description %></p>
+              </div>
+            </div>
+            <% }) %> <% } else { %>
+            <p class="text-center text-muted">No events scheduled</p>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Opportunity Section -->
+  <div id="add-opportunity" class="content-section" style="display: none">
+    <div class="row">
+      <div class="col-md-8 mx-auto">
+        <div class="form-section">
+          <h3>Add New Opportunity</h3>
+          <form id="opportunityForm">
+            <div class="mb-3">
+              <label class="form-label">Company Name</label>
+              <input type="text" class="form-control" name="company" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Position Title</label>
+              <input type="text" class="form-control" name="title" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Description</label>
+              <textarea
+                class="form-control"
+                name="description"
+                rows="4"
+                required
+              ></textarea>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Requirements</label>
+              <textarea
+                class="form-control"
+                name="requirements"
+                rows="4"
+                required
+              ></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">
+              Post Opportunity
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Event Section -->
+  <div id="add-event" class="content-section" style="display: none">
+    <div class="row">
+      <div class="col-md-8 mx-auto">
+        <div class="form-section">
+          <h3>Schedule New Event</h3>
+          <form id="eventForm">
+            <div class="mb-3">
+              <label class="form-label">Event Title</label>
+              <input type="text" class="form-control" name="title" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Date & Time</label>
+              <input
+                type="datetime-local"
+                class="form-control"
+                name="date"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Venue</label>
+              <input type="text" class="form-control" name="venue" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Description</label>
+              <textarea
+                class="form-control"
+                name="description"
+                rows="4"
+                required
+              ></textarea>
+            </div>
+            <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-primary">
+                Schedule Event
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                onclick="hideEventForm()"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Students Section -->
+  <div id="students" class="content-section" style="display: none">
+    <div class="row">
+      <div class="col-12"><%- include('../includes/student-list') %></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Handle navigation
+  document.querySelectorAll(".nav-link, .action-card").forEach((element) => {
+    element.addEventListener("click", (e) => {
+      e.preventDefault();
+
+      // Get target section
+      const targetId = element.classList.contains("action-card")
+        ? element.dataset.section
+        : element.getAttribute("href").substring(1);
+
+      // Hide all sections
+      document.querySelectorAll(".content-section").forEach((section) => {
+        section.style.display = "none";
+      });
+
+      // Remove active class from all links
+      document.querySelectorAll(".nav-link").forEach((navLink) => {
+        navLink.classList.remove("active");
+      });
+
+      // Show selected section
+      document.getElementById(targetId).style.display = "block";
+
+      // Activate corresponding nav link
+      document.querySelector(`[href="#${targetId}"]`)?.classList.add("active");
+    });
+  });
+
+  // Store opportunities data for editing
+  const opportunities = <%- JSON.stringify(opportunities) %>;
+
+  // Function to delete opportunity
+  async function deleteOpportunity(id) {
+    if (!confirm('Are you sure you want to delete this opportunity?')) return;
+
+    try {
+      const response = await fetch(`/opportunity/${id}`, {
+        method: 'DELETE'
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        alert(result.message);
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Failed to delete opportunity');
+    }
+  }
+
+  // Reset form when adding new opportunity
+  document.querySelectorAll('[data-section="add-opportunity"]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const form = document.getElementById('opportunityForm');
+      form.reset();
+
+      // Reset form title and button
+      form.querySelector('h3').textContent = 'Add New Opportunity';
+      form.querySelector('button').textContent = 'Post Opportunity';
+
+      // Remove status field if exists
+      const statusField = form.querySelector('[name="status"]');
+      if (statusField) {
+        statusField.closest('.mb-3').remove();
+      }
+
+      // Remove any existing submit handler
+      form.removeEventListener('submit', form._submitHandler);
+
+      // Add new submit handler for create
+      form._submitHandler = async function(e) {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const data = Object.fromEntries(formData.entries());
+
+        try {
+          const response = await fetch('/add-opportunity', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+
+          const result = await response.json();
+          if (result.success) {
+            alert(result.message);
+            window.location.href = '/tpo-dashboard#dashboard';
+            window.location.reload();
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          alert('Failed to post opportunity');
+        }
+      };
+
+      // Add the new submit handler
+      form.addEventListener('submit', form._submitHandler);
+    });
+  });
+
+  // Store events data for editing
+  const events = <%- JSON.stringify(events) %>;
+
+  // Add event deletion functionality
+  async function deleteEvent(id) {
+    if (!confirm('Are you sure you want to delete this event?')) return;
+
+    try {
+      const response = await fetch(`/event/${id}`, {
+        method: 'DELETE'
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        alert(result.message);
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Failed to delete event');
+    }
+  }
+
+  // Reset event form when adding new event
+  document.querySelectorAll('[data-section="add-event"]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const form = document.getElementById('eventForm');
+      form.reset();
+
+      // Reset form title and button
+      form.querySelector('h3').textContent = 'Schedule New Event';
+      form.querySelector('button[type="submit"]').textContent = 'Schedule Event';
+
+      // Show the form
+      showEventForm();
+
+      // Remove any existing submit handler
+      form.removeEventListener('submit', form._submitHandler);
+
+      // Add new submit handler for create
+      form._submitHandler = async function(e) {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const data = Object.fromEntries(formData.entries());
+
+        try {
+          const response = await fetch('/add-event', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+
+          const result = await response.json();
+          if (result.success) {
+            alert(result.message);
+            hideEventForm();
+            window.location.reload();
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          alert('Failed to schedule event');
+        }
+      };
+
+      // Add the new submit handler
+      form.addEventListener('submit', form._submitHandler);
+    });
+  });
+
+  // Handle event form submission
+  document.getElementById("eventForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+
+    try {
+      const response = await fetch("/add-event", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        alert(result.message);
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Failed to schedule event");
+    }
+  });
+
+  // Handle opportunity form submission
+  document.getElementById("opportunityForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+
+    try {
+      const response = await fetch("/add-opportunity", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        alert(result.message);
+        // Reload the page to show the new opportunity
+        window.location.href = "/tpo-dashboard#dashboard";
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Failed to post opportunity");
+    }
+  });
+
+  // Add these functions to your script section
+  function showEventForm() {
+    document.querySelectorAll('.content-section').forEach(section => {
+      section.style.display = 'none';
+    });
+    document.getElementById('add-event').style.display = 'block';
+  }
+
+  function hideEventForm() {
+    document.getElementById('add-event').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    document.getElementById('eventForm').reset();
+  }
+</script>

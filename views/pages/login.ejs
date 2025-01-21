@@ -1,0 +1,88 @@
+<% layout('layouts/auth-boilerplate') %>
+
+<div class="container">
+  <div class="login-container">
+    <h2 class="text-center mb-4">Placement Portal Login</h2>
+    <% if (error) { %>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <%= error %>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    <% } %>
+    <form id="loginForm">
+      <div class="mb-3">
+        <label for="email" class="form-label">Email address</label>
+        <input
+          type="email"
+          class="form-control"
+          id="email"
+          name="email"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input
+          type="password"
+          class="form-control"
+          id="password"
+          name="password"
+          required
+        />
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100">Login</button>
+      <div
+        id="loginError"
+        class="alert alert-danger mt-3"
+        style="display: none"
+      ></div>
+    </form>
+    <p class="text-center mt-3">
+      Don't have an account? <a href="/register">Register here</a>
+    </p>
+  </div>
+</div>
+
+<script>
+  const loginForm = document.getElementById("loginForm");
+  const loginError = document.getElementById("loginError");
+
+  loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    loginError.style.display = "none";
+
+    const formData = {
+      email: document.getElementById("email").value,
+      password: document.getElementById("password").value,
+    };
+
+    try {
+      const response = await fetch("/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        window.location.href = data.redirect;
+      } else {
+        loginError.textContent = data.message;
+        loginError.style.display = "block";
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      loginError.textContent = "Login failed. Please try again.";
+      loginError.style.display = "block";
+    }
+  });
+</script>

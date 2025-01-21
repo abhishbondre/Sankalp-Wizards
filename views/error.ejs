@@ -1,0 +1,39 @@
+<% layout('layouts/auth-boilerplate') %>
+
+<div class="container">
+  <div class="error-container">
+    <div class="row justify-content-center">
+      <div class="col-md-8 text-center">
+        <div class="error-content">
+          <div class="error-icon mb-4">
+            <i class="bi bi-exclamation-triangle display-1 text-warning"></i>
+          </div>
+
+          <h1 class="error-title mb-4"><%= title %></h1>
+
+          <div class="error-message mb-4">
+            <p class="lead"><%= message %></p>
+            <% if (process.env.NODE_ENV === 'development' && error) { %>
+            <div class="error-details text-start bg-light p-3 rounded">
+              <pre class="mb-0"><%= JSON.stringify(error, null, 2) %></pre>
+            </div>
+            <% } %>
+          </div>
+
+          <div class="error-actions">
+            <a href="/" class="btn btn-primary">
+              <i class="bi bi-house-door me-2"></i>
+              Back to Home
+            </a>
+            <% if (backUrl) { %>
+            <a href="<%= backUrl %>" class="btn btn-outline-primary ms-2">
+              <i class="bi bi-arrow-left me-2"></i>
+              Go Back
+            </a>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,169 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-body">
+          <h2 class="text-center mb-4">Complete Your Profile</h2>
+          <form id="completeProfileForm">
+            <% if (userType === 'student') { %>
+            <div class="mb-3">
+              <label for="collegeId" class="form-label">College ID</label>
+              <input
+                type="text"
+                class="form-control"
+                id="collegeId"
+                name="collegeId"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="collegeName" class="form-label">College Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="collegeName"
+                name="collegeName"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="course" class="form-label">Course</label>
+              <input
+                type="text"
+                class="form-control"
+                id="course"
+                name="course"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="year" class="form-label">Year</label>
+              <select class="form-select" id="year" name="year" required>
+                <option value="">Select Year</option>
+                <option value="1">1st Year</option>
+                <option value="2">2nd Year</option>
+                <option value="3">3rd Year</option>
+                <option value="4">4th Year</option>
+              </select>
+            </div>
+            <% } else { %>
+            <div class="mb-3">
+              <label for="collegeId" class="form-label">College ID</label>
+              <input
+                type="text"
+                class="form-control"
+                id="collegeId"
+                name="collegeId"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="collegeName" class="form-label">College Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="collegeName"
+                name="collegeName"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="phone" class="form-label">Phone Number</label>
+              <input
+                type="tel"
+                class="form-control"
+                id="phone"
+                name="phone"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="designation" class="form-label">Designation</label>
+              <input
+                type="text"
+                class="form-control"
+                id="designation"
+                name="designation"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="department" class="form-label">Department</label>
+              <input
+                type="text"
+                class="form-control"
+                id="department"
+                name="department"
+                required
+              />
+            </div>
+            <% } %>
+            <button type="submit" class="btn btn-primary w-100">
+              Complete Profile
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document
+    .getElementById("completeProfileForm")
+    .addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData.entries());
+
+      try {
+        const response = await fetch("/complete-profile", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          window.location.href =
+            '<%= userType === "student" ? "/student-dashboard" : "/tpo-dashboard" %>';
+        } else {
+          const errorDiv = document.createElement("div");
+          errorDiv.className = "alert alert-danger mt-3";
+          errorDiv.textContent = result.message || "Failed to complete profile";
+          if (result.error) {
+            console.error("Error details:", result.error);
+          }
+
+          // Remove any existing error message
+          const existingError = document.querySelector(".alert-danger");
+          if (existingError) {
+            existingError.remove();
+          }
+
+          // Add new error message
+          e.target.appendChild(errorDiv);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        const errorDiv = document.createElement("div");
+        errorDiv.className = "alert alert-danger mt-3";
+        errorDiv.textContent = "Failed to complete profile. Please try again.";
+
+        // Remove any existing error message
+        const existingError = document.querySelector(".alert-danger");
+        if (existingError) {
+          existingError.remove();
+        }
+
+        // Add new error message
+        e.target.appendChild(errorDiv);
+      }
+    });
+</script>

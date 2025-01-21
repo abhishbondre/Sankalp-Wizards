@@ -1,0 +1,170 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="row">
+  <!-- Profile Section -->
+  <div id="profile" class="content-section">
+    <div class="row">
+      <div class="col-12">
+        <div class="dashboard-card profile-card">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="section-title mb-0">Student Profile</h3>
+          </div>
+          <%- include('../includes/student-profile') %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Opportunities Section -->
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="dashboard-card">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h3 class="section-title mb-0">Available Opportunities</h3>
+        </div>
+
+        <div class="opportunities-list">
+          <% if (opportunities && opportunities.length > 0) { %> <%
+          opportunities.forEach(opportunity => { %>
+          <div class="opportunity-card">
+            <div class="opportunity-header">
+              <h4><%= opportunity.title %></h4>
+              <div class="meta-info">
+                <span class="company-name"><%= opportunity.company %></span>
+                <span class="posted-by">
+                  <i class="bi bi-person"></i>
+                  Posted by <%= opportunity.createdBy?.name || 'TPO' %>
+                </span>
+              </div>
+            </div>
+            <div class="opportunity-body">
+              <p><%= opportunity.description %></p>
+              <div class="requirements mt-3">
+                <h5>Requirements:</h5>
+                <p><%= opportunity.requirements %></p>
+              </div>
+            </div>
+            <div class="opportunity-footer">
+              <div class="meta-info">
+                <span class="posted-date">
+                  <i class="bi bi-clock"></i>
+                  Posted <%= new
+                  Date(opportunity.createdAt).toLocaleDateString() %>
+                </span>
+                <span class="badge bg-success">Active</span>
+              </div>
+              <button class="btn btn-primary btn-sm apply-btn">
+                <i class="bi bi-send"></i> Apply Now
+              </button>
+            </div>
+          </div>
+          <% }) %> <% } else { %>
+          <div class="empty-state">
+            <div class="empty-state-icon">
+              <i class="bi bi-briefcase-fill"></i>
+            </div>
+            <h4>No Opportunities Available</h4>
+            <p class="text-muted">Check back later for new opportunities</p>
+          </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Events Section -->
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="dashboard-card">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h3 class="section-title mb-0">Upcoming Events</h3>
+        </div>
+
+        <div class="events-list">
+          <% if (events && events.length > 0) { %> <% events.forEach(event => {
+          %>
+          <div class="event-card">
+            <div class="event-header">
+              <h4><%= event.title %></h4>
+              <span class="posted-by">
+                <i class="bi bi-person"></i>
+                Organized by <%= event.createdBy?.name || 'TPO' %>
+              </span>
+              <div class="event-meta">
+                <span
+                  ><i class="bi bi-calendar-event"></i> <%= new
+                  Date(event.date).toLocaleDateString() %></span
+                >
+                <span
+                  ><i class="bi bi-clock"></i> <%= new
+                  Date(event.date).toLocaleTimeString() %></span
+                >
+                <span><i class="bi bi-geo-alt"></i> <%= event.venue %></span>
+              </div>
+            </div>
+            <div class="event-body">
+              <p><%= event.description %></p>
+            </div>
+            <div class="event-footer">
+              <button class="btn btn-outline-primary btn-sm register-btn">
+                <i class="bi bi-person-plus"></i> Register
+              </button>
+            </div>
+          </div>
+          <% }) %> <% } else { %>
+          <div class="empty-state">
+            <div class="empty-state-icon">
+              <i class="bi bi-calendar-event-fill"></i>
+            </div>
+            <h4>No Upcoming Events</h4>
+            <p class="text-muted">Check back later for new events</p>
+          </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TPO Info Section -->
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="dashboard-card">
+        <h3 class="section-title">TPO Contact Information</h3>
+        <div class="tpo-info">
+          <% if (tpoInfo) { %>
+          <div class="info-group">
+            <span class="info-label"><i class="bi bi-person"></i> Name:</span>
+            <span class="info-value"
+              ><%= tpoInfo.user?.name || 'Not Available' %></span
+            >
+          </div>
+          <div class="info-group">
+            <span class="info-label"
+              ><i class="bi bi-envelope"></i> Email:</span
+            >
+            <span class="info-value"
+              ><%= tpoInfo.user?.email || 'Not Available' %></span
+            >
+          </div>
+          <div class="info-group">
+            <span class="info-label"><i class="bi bi-phone"></i> Phone:</span>
+            <span class="info-value"
+              ><%= tpoInfo.phone || 'Not Available' %></span
+            >
+          </div>
+          <div class="info-group">
+            <span class="info-label"
+              ><i class="bi bi-building"></i> Department:</span
+            >
+            <span class="info-value"
+              ><%= tpoInfo.profile?.department || 'Not Available' %></span
+            >
+          </div>
+          <% } else { %>
+          <p class="text-center text-muted">TPO information not available</p>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

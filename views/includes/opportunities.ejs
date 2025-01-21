@@ -1,0 +1,16 @@
+<div class="opportunity-cards">
+    <% if (locals.opportunities && opportunities.length > 0) { %>
+        <% opportunities.forEach(function(opportunity) { %>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><%= opportunity.companyName %></h5>
+                    <h6 class="card-subtitle mb-2 text-muted"><%= opportunity.position %></h6>
+                    <p class="card-text"><%= opportunity.description %></p>
+                    <button class="btn btn-primary">Apply Now</button>
+                </div>
+            </div>
+        <% }); %>
+    <% } else { %>
+        <div class="alert alert-info">No upcoming opportunities available.</div>
+    <% } %>
+</div> 

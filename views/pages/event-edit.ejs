@@ -1,0 +1,90 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="row">
+  <div class="col-md-8 mx-auto">
+    <div class="dashboard-card">
+      <div class="form-section">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h3 class="section-title mb-0">Edit Event</h3>
+          <a href="/tpo-dashboard" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left"></i> Back to Dashboard
+          </a>
+        </div>
+
+        <form id="editEventForm">
+          <div class="mb-3">
+            <label class="form-label">Event Title</label>
+            <input
+              type="text"
+              class="form-control"
+              name="title"
+              value="<%= event.title %>"
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Date & Time</label>
+            <input
+              type="datetime-local"
+              class="form-control"
+              name="date"
+              value="<%= new Date(event.date).toISOString().slice(0, 16) %>"
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Venue</label>
+            <input
+              type="text"
+              class="form-control"
+              name="venue"
+              value="<%= event.venue %>"
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" name="description" rows="4" required>
+<%= event.description %></textarea
+            >
+          </div>
+
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Update Event</button>
+            <a href="/tpo-dashboard" class="btn btn-secondary"> Cancel </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document
+    .getElementById("editEventForm")
+    .addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData.entries());
+
+      try {
+        const response = await fetch(`/event/<%= event._id %>`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+        if (result.success) {
+          alert(result.message);
+          window.location.href = "/tpo-dashboard#dashboard";
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        alert("Failed to update event");
+      }
+    });
+</script>

@@ -1,0 +1,20 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="container py-5">
+  <div class="card">
+    <div class="card-body">
+      <div class="text-center mb-4">
+        <img
+          src="<%= student.photoUrl || '/images/default-avatar.png' %>"
+          alt="Profile Photo"
+          class="rounded-circle"
+          style="width: 150px; height: 150px; object-fit: cover"
+        />
+        <h3 class="mt-3"><%= student.name %></h3>
+        <p class="text-muted">Year <%= student.year %></p>
+      </div>
+
+      <!-- Rest of the profile content -->
+    </div>
+  </div>
+</div>

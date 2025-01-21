@@ -1,0 +1,120 @@
+<% layout('layouts/auth-boilerplate') %>
+
+<div class="container">
+  <div class="register-container">
+    <h2 class="text-center mb-4">Create Account</h2>
+    <% if (typeof error !== 'undefined' && error !== '') { %>
+    <div class="alert alert-danger"><%= error %></div>
+    <% } %>
+    <form id="registerForm">
+      <div class="mb-3">
+        <label for="userType" class="form-label">Account Type</label>
+        <select class="form-select" id="userType" name="userType" required>
+          <option value="">Select Account Type</option>
+          <option value="student">Student</option>
+          <option value="tpo">TPO</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="fullName" class="form-label">Full Name</label>
+        <input
+          type="text"
+          class="form-control"
+          id="fullName"
+          name="fullName"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="email" class="form-label">Email address</label>
+        <input
+          type="email"
+          class="form-control"
+          id="email"
+          name="email"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input
+          type="password"
+          class="form-control"
+          id="password"
+          name="password"
+          required
+          minlength="6"
+        />
+        <div class="form-text">Password must be at least 6 characters long</div>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100">Register</button>
+      <div
+        id="registerError"
+        class="alert alert-danger mt-3"
+        style="display: none"
+      ></div>
+    </form>
+    <p class="text-center mt-3">
+      Already have an account? <a href="/login">Login here</a>
+    </p>
+  </div>
+</div>
+
+<script>
+  const registerForm = document.getElementById("registerForm");
+  const registerError = document.getElementById("registerError");
+
+  registerForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    registerError.style.display = "none";
+
+    const formData = {
+      userType: document.getElementById("userType").value,
+      fullName: document.getElementById("fullName").value,
+      email: document.getElementById("email").value,
+      password: document.getElementById("password").value,
+    };
+
+    // Basic validation
+    if (!formData.userType) {
+      registerError.textContent = "Please select an account type";
+      registerError.style.display = "block";
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      registerError.textContent = "Password must be at least 6 characters long";
+      registerError.style.display = "block";
+      return;
+    }
+
+    try {
+      const response = await fetch("/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        alert(data.message);
+        window.location.href = "/login";
+      } else {
+        registerError.textContent = data.message || "Registration failed";
+        if (data.error) {
+          console.error("Server error details:", data.error);
+          registerError.textContent += ` (${data.error})`;
+        }
+        registerError.style.display = "block";
+      }
+    } catch (error) {
+      console.error("Registration error:", error);
+      registerError.textContent = "Registration failed. Please try again.";
+      registerError.style.display = "block";
+    }
+  });
+</script>

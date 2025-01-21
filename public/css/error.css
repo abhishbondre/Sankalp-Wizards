@@ -1,0 +1,87 @@
+@import url("common.css");
+
+.error-container {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.error-content {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 3rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(10px);
+}
+
+.error-icon {
+  color: #f59e0b;
+}
+
+.error-title {
+  color: var(--dark-color);
+  font-weight: 700;
+}
+
+.error-message {
+  color: #64748b;
+}
+
+.error-details {
+  font-size: 0.875rem;
+  color: #475569;
+  background: #f8fafc;
+  border-radius: 10px;
+  margin-top: 1.5rem;
+}
+
+.error-actions {
+  margin-top: 2rem;
+}
+
+.error-actions .btn {
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.error-actions .btn:hover {
+  transform: translateY(-2px);
+}
+
+.error-container {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+}
+
+.error-content {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 3rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.error-title {
+  color: var(--dark-color);
+  font-weight: 700;
+}
+
+.error-message {
+  color: #64748b;
+}
+
+.error-details {
+  font-size: 0.875rem;
+  color: #475569;
+}
+
+.error-actions {
+  margin-top: 2rem;
+}
+
+.error-actions .btn {
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+}
